@@ -6,7 +6,7 @@ However, this won't work when running this out of visual studios debugger, as it
 
 Once in the text file, add the filepath of a new text file in your folder of music.
 
-You want to have the text file you just made follow the following structure:
+You want to have the text file you just made must start with the following, and follow its instructions:
 
 	First 5 lines are for comments, below that is for songs, write songs in the format shown below.
 	
