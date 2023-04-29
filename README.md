@@ -16,4 +16,5 @@ You want to have the text file you just made must start with the following, and 
         
 Please note that SongFileName.mp3 would not be the full path(e.g. C:\Users\etc.), rather just the name of the file and the extention.
 
-There are a few bugs that i know about and would fix, however, i am too lazy :)
+There are a few bugs/issues that i know about and would fix, however, i am too lazy :)
+ - When changing directory, the track number doesn't reset.
