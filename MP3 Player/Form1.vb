@@ -9,9 +9,12 @@ Public Class Form1
     Dim dirList(0) As String
     Dim mainDirectory As String = ""
     Dim PlaylistLen As Integer = 0
+    Dim progressSong As Byte = 1
     Private Sub BackToStartBtn_Click(sender As Object, e As EventArgs) Handles BackToStartBtn.Click
         If SongID > 1 Then
             SongID -= 1
+        Else
+            SongID = PlaylistLen
         End If
         TrackNoBox.Text = SongID
         Player.controls.stop()
@@ -109,9 +112,13 @@ BeforeDecrement:
                 Case Is < 1
                     SongID = 1
                 Case Is >= PlaylistLen
-                    SongID = 1
+                    If progressSong = 0 Then
+                        SongID += progressSong
+                    Else
+                        SongID = 1
+                    End If
                 Case Else
-                    SongID += 1
+                    SongID += progressSong
             End Select
             TrackNoBox.Text = SongID
             Player.controls.stop()
@@ -175,5 +182,13 @@ BeforeDecrement:
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
         Process.Start("cmd", "/c start " & """""" & mainDirectory & """""")
+    End Sub
+
+    Private Sub CheckBox1_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox1.CheckedChanged
+        If CheckBox1.Checked Then
+            progressSong = 0
+        Else
+            progressSong = 1
+        End If
     End Sub
 End Class

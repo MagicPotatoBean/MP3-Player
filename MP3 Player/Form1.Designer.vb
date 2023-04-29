@@ -27,22 +27,24 @@ Partial Class Form1
         Me.Button1 = New System.Windows.Forms.Button()
         Me.DomainUpDown1 = New System.Windows.Forms.DomainUpDown()
         Me.Volume = New System.Windows.Forms.TrackBar()
+        Me.RestartBtn = New System.Windows.Forms.Button()
         Me.TrackNoBox = New System.Windows.Forms.TextBox()
         Me.Label1 = New System.Windows.Forms.Label()
-        Me.displayName = New System.Windows.Forms.TextBox()
-        Me.FolderBrowserDialog1 = New System.Windows.Forms.FolderBrowserDialog()
-        Me.Timer1 = New System.Windows.Forms.Timer(Me.components)
-        Me.RestartBtn = New System.Windows.Forms.Button()
         Me.SkipBtn = New System.Windows.Forms.Button()
         Me.PlayBtn = New System.Windows.Forms.Button()
         Me.StopBtn = New System.Windows.Forms.Button()
         Me.BackToStartBtn = New System.Windows.Forms.Button()
+        Me.displayName = New System.Windows.Forms.TextBox()
+        Me.FolderBrowserDialog1 = New System.Windows.Forms.FolderBrowserDialog()
+        Me.Timer1 = New System.Windows.Forms.Timer(Me.components)
+        Me.CheckBox1 = New System.Windows.Forms.CheckBox()
         Me.GroupBox1.SuspendLayout()
         CType(Me.Volume, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'GroupBox1
         '
+        Me.GroupBox1.Controls.Add(Me.CheckBox1)
         Me.GroupBox1.Controls.Add(Me.Button1)
         Me.GroupBox1.Controls.Add(Me.DomainUpDown1)
         Me.GroupBox1.Controls.Add(Me.Volume)
@@ -64,7 +66,7 @@ Partial Class Form1
         'Button1
         '
         Me.Button1.ImeMode = System.Windows.Forms.ImeMode.NoControl
-        Me.Button1.Location = New System.Drawing.Point(195, 92)
+        Me.Button1.Location = New System.Drawing.Point(109, 94)
         Me.Button1.Name = "Button1"
         Me.Button1.Size = New System.Drawing.Size(33, 23)
         Me.Button1.TabIndex = 2
@@ -75,7 +77,7 @@ Partial Class Form1
         '
         Me.DomainUpDown1.Location = New System.Drawing.Point(6, 95)
         Me.DomainUpDown1.Name = "DomainUpDown1"
-        Me.DomainUpDown1.Size = New System.Drawing.Size(183, 20)
+        Me.DomainUpDown1.Size = New System.Drawing.Size(97, 20)
         Me.DomainUpDown1.TabIndex = 10
         Me.DomainUpDown1.Text = "Select Directory"
         '
@@ -92,6 +94,18 @@ Partial Class Form1
         Me.Volume.TabIndex = 9
         Me.Volume.TickFrequency = 10
         Me.Volume.Value = 50
+        '
+        'RestartBtn
+        '
+        Me.RestartBtn.BackgroundImage = Global.MP3_Player.My.Resources.Resources.Play
+        Me.RestartBtn.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
+        Me.RestartBtn.Enabled = False
+        Me.RestartBtn.ImeMode = System.Windows.Forms.ImeMode.NoControl
+        Me.RestartBtn.Location = New System.Drawing.Point(72, 36)
+        Me.RestartBtn.Name = "RestartBtn"
+        Me.RestartBtn.Size = New System.Drawing.Size(23, 23)
+        Me.RestartBtn.TabIndex = 8
+        Me.RestartBtn.UseVisualStyleBackColor = True
         '
         'TrackNoBox
         '
@@ -115,29 +129,6 @@ Partial Class Form1
         Me.Label1.Size = New System.Drawing.Size(55, 13)
         Me.Label1.TabIndex = 6
         Me.Label1.Text = "Track No."
-        '
-        'displayName
-        '
-        Me.displayName.Dock = System.Windows.Forms.DockStyle.Top
-        Me.displayName.Enabled = False
-        Me.displayName.Location = New System.Drawing.Point(3, 16)
-        Me.displayName.Name = "displayName"
-        Me.displayName.ReadOnly = True
-        Me.displayName.Size = New System.Drawing.Size(226, 20)
-        Me.displayName.TabIndex = 0
-        Me.displayName.Text = "Off"
-        '
-        'RestartBtn
-        '
-        Me.RestartBtn.BackgroundImage = Global.MP3_Player.My.Resources.Resources.Play
-        Me.RestartBtn.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
-        Me.RestartBtn.Enabled = False
-        Me.RestartBtn.ImeMode = System.Windows.Forms.ImeMode.NoControl
-        Me.RestartBtn.Location = New System.Drawing.Point(72, 36)
-        Me.RestartBtn.Name = "RestartBtn"
-        Me.RestartBtn.Size = New System.Drawing.Size(23, 23)
-        Me.RestartBtn.TabIndex = 8
-        Me.RestartBtn.UseVisualStyleBackColor = True
         '
         'SkipBtn
         '
@@ -187,6 +178,30 @@ Partial Class Form1
         Me.BackToStartBtn.TabIndex = 1
         Me.BackToStartBtn.UseVisualStyleBackColor = True
         '
+        'displayName
+        '
+        Me.displayName.Dock = System.Windows.Forms.DockStyle.Top
+        Me.displayName.Enabled = False
+        Me.displayName.Location = New System.Drawing.Point(3, 16)
+        Me.displayName.Name = "displayName"
+        Me.displayName.ReadOnly = True
+        Me.displayName.Size = New System.Drawing.Size(226, 20)
+        Me.displayName.TabIndex = 0
+        Me.displayName.Text = "Off"
+        '
+        'Timer1
+        '
+        '
+        'CheckBox1
+        '
+        Me.CheckBox1.AutoSize = True
+        Me.CheckBox1.Location = New System.Drawing.Point(147, 98)
+        Me.CheckBox1.Name = "CheckBox1"
+        Me.CheckBox1.Size = New System.Drawing.Size(76, 17)
+        Me.CheckBox1.TabIndex = 11
+        Me.CheckBox1.Text = "Loop song"
+        Me.CheckBox1.UseVisualStyleBackColor = True
+        '
         'Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -219,4 +234,5 @@ Partial Class Form1
     Friend WithEvents displayName As TextBox
     Friend WithEvents FolderBrowserDialog1 As FolderBrowserDialog
     Friend WithEvents Timer1 As Timer
+    Friend WithEvents CheckBox1 As CheckBox
 End Class
