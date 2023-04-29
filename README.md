@@ -1,7 +1,7 @@
 # MP3-Player
  An MP3 player that utilises Windows Media Player
 
-To add a library to your player, launch it and click "edit", then it will open a text file at C:\Users\<your_name>\Appdata\Roaming\MP3Radio\Directory.txt
+To add a library to your player, launch it and click "edit", then it will open a text file at C:\Users\your_name\Appdata\Roaming\MP3Radio\Directory.txt
 However, this won't work when running this out of visual studios debugger, as it get confused and navigates to the \bin\debug directory
 
 Once in the text file, add the filepath of a new text file in your folder of music.
