@@ -181,7 +181,7 @@ BeforeDecrement:
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
-        Process.Start("cmd", "/c start " & """""" & mainDirectory & """""")
+        Process.Start("notepad", """""" & mainDirectory & """""")
     End Sub
 
     Private Sub CheckBox1_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox1.CheckedChanged
