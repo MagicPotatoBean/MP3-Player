@@ -14,3 +14,4 @@ C:\Users\terra\source\repos\MP3 Player\MP3 Player\obj\Debug\MP3 Player.pdb
 C:\Users\terra\source\repos\MP3 Player\MP3 Player\obj\Debug\Interop.MediaPlayer.dll
 C:\Users\terra\source\repos\MP3 Player\MP3 Player\obj\Debug\Interop.WMPLib.dll
 C:\Users\terra\source\repos\MP3 Player\MP3 Player\obj\Debug\MP3 Player.vbproj.ResolveComReference.cache
+C:\Users\terra\source\repos\MP3 Player\MP3 Player\obj\Debug\Interop.Shell32.dll

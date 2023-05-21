@@ -1,6 +1,7 @@
 ﻿Imports System.IO
 Imports System.Reflection.Emit
 Imports WMPLib
+Imports Shell32
 
 Public Class Form1
     Dim Player As WindowsMediaPlayer = New WindowsMediaPlayer
@@ -10,6 +11,7 @@ Public Class Form1
     Dim mainDirectory As String = ""
     Dim PlaylistLen As Integer = 0
     Dim progressSong As Byte = 1
+    Dim renamingFile As Boolean = False
     Private Sub BackToStartBtn_Click(sender As Object, e As EventArgs) Handles BackToStartBtn.Click
         If SongID > 1 Then
             SongID -= 1
@@ -18,9 +20,9 @@ Public Class Form1
         End If
         TrackNoBox.Text = SongID
         Player.controls.stop()
+        displayName.Text = pathFromIndex(True)
         Player.URL = pathFromIndex(False)
         Player.controls.play()
-        displayName.Text = pathFromIndex(True)
         Timer1.Start()
     End Sub
 
@@ -42,17 +44,17 @@ Public Class Form1
         SongID += 1
         TrackNoBox.Text = SongID
         Player.controls.stop()
+        displayName.Text = pathFromIndex(True)
         Player.URL = pathFromIndex(False)
         Player.controls.play()
-        displayName.Text = pathFromIndex(True)
         Timer1.Start()
     End Sub
 
     Private Sub Restart_Click(sender As Object, e As EventArgs) Handles RestartBtn.Click
         Player.controls.stop()
+        displayName.Text = pathFromIndex(True)
         Player.URL = pathFromIndex(False)
         Player.controls.play()
-        displayName.Text = pathFromIndex(True)
         Timer1.Start()
     End Sub
 
@@ -63,8 +65,28 @@ BeforeDecrement:
             Dim songs() As String = File.ReadAllLines(directory)
             PlaylistLen = songs.GetUpperBound(0) - 4
             Dim song() As String = songs(SongID + 4).Split(";")
+
             If displayName Then
-                Return song(0)
+                If song.Length = 1 And File.Exists(Strings.Left(directory, Strings.InStrRev(directory, "\")) & "\" & song(0)) Then
+                    renamingFile = True
+                    Dim currentSongID As Integer = SongID
+                    Dim promptTitle As String = ""
+                    Dim Properties As Dictionary(Of Integer, KeyValuePair(Of String, String)) = GetFileProperties(Strings.Left(directory, Strings.InStrRev(directory, "\")) & "\" & song(0))
+                    For Each FileProperty As KeyValuePair(Of Integer, KeyValuePair(Of String, String)) In Properties
+                        If FileProperty.Value.Key = "Title" Then
+                            promptTitle = FileProperty.Value.Value
+                        End If
+                    Next
+                    Dim newTitle As String = InputBox("Song title for """ & song(0) & """:", "Song missing title", promptTitle)
+                    songs(currentSongID + 4) = newTitle & ";" & song(0)
+                    File.WriteAllLines(directory, songs)
+                    renamingFile = False
+                    GoTo BeforeDecrement
+                Else
+                    Return song(0)
+                End If
+            ElseIf song.Length = 1 Then
+                MsgBox("Filepath missing for : """ & song(0) & """ in """ & directory & """")
             Else
 
                 If File.Exists(Strings.Left(directory, Strings.InStrRev(directory, "\")) & "\" & song(1)) Then
@@ -81,6 +103,22 @@ BeforeDecrement:
             GoTo BeforeDecrement
         End Try
     End Function
+    Public Function GetFileProperties(ByVal FileName As String) As Dictionary(Of Integer, KeyValuePair(Of String, String))
+        Dim Shell As New Shell
+        Dim Folder As Folder = Shell.[NameSpace](Path.GetDirectoryName(FileName))
+        Dim File As FolderItem = Folder.ParseName(Path.GetFileName(FileName))
+        Dim Properties As New Dictionary(Of Integer, KeyValuePair(Of String, String))()
+        Dim Index As Integer
+        Dim Keys As Integer = Folder.GetDetailsOf(File, 0).Count
+        For Index = 0 To Keys - 1
+            Dim CurrentKey As String = Folder.GetDetailsOf(Nothing, Index)
+            Dim CurrentValue As String = Folder.GetDetailsOf(File, Index)
+            If CurrentValue <> "" Then
+                Properties.Add(Index, New KeyValuePair(Of String, String)(CurrentKey, CurrentValue))
+            End If
+        Next
+        Return Properties
+    End Function
 
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
 
@@ -92,8 +130,8 @@ BeforeDecrement:
             File.Create(mainPath & "Directory.txt")
             mainDirectory = mainPath & "Directory.txt"
         End If
-        Dim songs() As String = File.ReadAllLines(mainDirectory)
-        For Each value In songs
+        Dim directories() As String = File.ReadAllLines(mainDirectory)
+        For Each value In directories
             dirList(dirList.GetUpperBound(0)) = value
             ReDim Preserve dirList(dirList.GetUpperBound(0) + 1)
             DomainUpDown1.Items.Add(IO.Path.GetFileName(value))
@@ -107,7 +145,7 @@ BeforeDecrement:
 
     Private Sub Timer1_Tick(sender As Object, e As EventArgs) Handles Timer1.Tick
 
-        If Player.playState = 10 Or Player.playState = 1 Then
+        If Player.playState = 10 Or Player.playState = 1 And Not renamingFile Then
             Select Case SongID
                 Case Is < 1
                     SongID = 1
@@ -122,9 +160,9 @@ BeforeDecrement:
             End Select
             TrackNoBox.Text = SongID
             Player.controls.stop()
+            displayName.Text = pathFromIndex(True)
             Player.URL = pathFromIndex(False)
             Player.controls.play()
-            displayName.Text = pathFromIndex(True)
         End If
 
     End Sub
@@ -161,9 +199,9 @@ BeforeDecrement:
                 Label1.Enabled = True
                 TrackNoBox.Enabled = True
                 Volume.Enabled = True
+                displayName.Text = pathFromIndex(True)
                 Player.URL = pathFromIndex(False)
                 Player.controls.stop()
-                displayName.Text = pathFromIndex(True)
             Else
                 displayName.Enabled = False
                 BackToStartBtn.Enabled = False
@@ -176,7 +214,6 @@ BeforeDecrement:
                 Volume.Enabled = False
             End If
         Catch ex As Exception
-
         End Try
     End Sub
 
