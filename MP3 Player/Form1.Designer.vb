@@ -24,6 +24,7 @@ Partial Class Form1
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
+        Me.CheckBox1 = New System.Windows.Forms.CheckBox()
         Me.Button1 = New System.Windows.Forms.Button()
         Me.DomainUpDown1 = New System.Windows.Forms.DomainUpDown()
         Me.Volume = New System.Windows.Forms.TrackBar()
@@ -37,7 +38,6 @@ Partial Class Form1
         Me.displayName = New System.Windows.Forms.TextBox()
         Me.FolderBrowserDialog1 = New System.Windows.Forms.FolderBrowserDialog()
         Me.Timer1 = New System.Windows.Forms.Timer(Me.components)
-        Me.CheckBox1 = New System.Windows.Forms.CheckBox()
         Me.GroupBox1.SuspendLayout()
         CType(Me.Volume, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
@@ -62,6 +62,16 @@ Partial Class Form1
         Me.GroupBox1.Size = New System.Drawing.Size(232, 120)
         Me.GroupBox1.TabIndex = 2
         Me.GroupBox1.TabStop = False
+        '
+        'CheckBox1
+        '
+        Me.CheckBox1.AutoSize = True
+        Me.CheckBox1.Location = New System.Drawing.Point(147, 98)
+        Me.CheckBox1.Name = "CheckBox1"
+        Me.CheckBox1.Size = New System.Drawing.Size(76, 17)
+        Me.CheckBox1.TabIndex = 11
+        Me.CheckBox1.Text = "Loop song"
+        Me.CheckBox1.UseVisualStyleBackColor = True
         '
         'Button1
         '
@@ -97,7 +107,7 @@ Partial Class Form1
         '
         'RestartBtn
         '
-        Me.RestartBtn.BackgroundImage = Global.MP3_Player.My.Resources.Resources.Play
+        Me.RestartBtn.BackgroundImage = Global.MP3_Player.My.Resources.Resources.Restart
         Me.RestartBtn.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
         Me.RestartBtn.Enabled = False
         Me.RestartBtn.ImeMode = System.Windows.Forms.ImeMode.NoControl
@@ -144,7 +154,7 @@ Partial Class Form1
         '
         'PlayBtn
         '
-        Me.PlayBtn.BackgroundImage = Global.MP3_Player.My.Resources.Resources.Restart
+        Me.PlayBtn.BackgroundImage = Global.MP3_Player.My.Resources.Resources.Play
         Me.PlayBtn.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
         Me.PlayBtn.Enabled = False
         Me.PlayBtn.ImeMode = System.Windows.Forms.ImeMode.NoControl
@@ -191,16 +201,6 @@ Partial Class Form1
         '
         'Timer1
         '
-        '
-        'CheckBox1
-        '
-        Me.CheckBox1.AutoSize = True
-        Me.CheckBox1.Location = New System.Drawing.Point(147, 98)
-        Me.CheckBox1.Name = "CheckBox1"
-        Me.CheckBox1.Size = New System.Drawing.Size(76, 17)
-        Me.CheckBox1.TabIndex = 11
-        Me.CheckBox1.Text = "Loop song"
-        Me.CheckBox1.UseVisualStyleBackColor = True
         '
         'Form1
         '
