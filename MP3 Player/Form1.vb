@@ -84,7 +84,7 @@ BeforeDecrement:
                     renamingFile = False
                     GoTo BeforeDecrement
                 Else
-                    Return song(0)
+                    Return song(1)
                 End If
             ElseIf song.Length = 1 Then
                 MsgBox("Filepath missing for : """ & song(0) & """ in """ & directory & """")
