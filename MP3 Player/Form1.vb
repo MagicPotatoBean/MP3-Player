@@ -12,7 +12,6 @@ Public Class Form1
     Dim PlaylistLen As Integer = 0
     Dim progressSong As Byte = 1
     Dim renamingFile As Boolean = False
-    Dim directorylist As New Dictionary(Of String, String)
     Private Sub BackToStartBtn_Click(sender As Object, e As EventArgs) Handles BackToStartBtn.Click
         If SongID > 1 Then
             SongID -= 1
@@ -151,17 +150,18 @@ BeforeDecrement:
                 populateToolStripMenu(newToolStripMenuItem, value)
             Next
         Else
-            directorylist.Add(IO.Path.GetFileNameWithoutExtension(path), path)
             newToolStripMenuItem.Checked = False
+            newToolStripMenuItem.Tag = path
             AddHandler newToolStripMenuItem.Click, AddressOf toolStripClickHandler
         End If
         parentToolStripMenu.DropDownItems.Add(newToolStripMenuItem)
     End Sub
     Private Sub toolStripClickHandler(sender As Object, e As EventArgs)
-        If directorylist(sender.ToString) <> directory Then
+        Dim toolstrip As ToolStripMenuItem = sender
+        If toolstrip.Tag <> directory Then
             Try
-                If File.Exists(directorylist(sender.ToString)) Then
-                    directory = directorylist(sender.ToString)
+                If File.Exists(toolstrip.Tag) Then
+                    directory = toolstrip.Tag
 
                     displayName.Enabled = True
                     BackToStartBtn.Enabled = True
