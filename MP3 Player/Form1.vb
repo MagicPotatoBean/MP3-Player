@@ -63,10 +63,12 @@ Public Class Form1
     Public Function pathFromIndex(displayName As Boolean) As String
         Try
 BeforeDecrement:
+            If SongID < 1 Then
+                SongID = 1
+            End If
             Dim songs() As String = File.ReadAllLines(directory)
             PlaylistLen = songs.GetUpperBound(0) - 4
             Dim song() As String = songs(SongID + 4).Split(";")
-
             If displayName Then
                 If song.Length = 1 And File.Exists(Strings.Left(directory, Strings.InStrRev(directory, "\")) & "\" & song(0)) Then
                     renamingFile = True
@@ -84,7 +86,7 @@ BeforeDecrement:
                     renamingFile = False
                     GoTo BeforeDecrement
                 Else
-                    Return song(1)
+                    Return song(0)
                 End If
             ElseIf song.Length = 1 Then
                 MsgBox("Filepath missing for : """ & song(0) & """ in """ & directory & """")
@@ -156,37 +158,39 @@ BeforeDecrement:
         parentToolStripMenu.DropDownItems.Add(newToolStripMenuItem)
     End Sub
     Private Sub toolStripClickHandler(sender As Object, e As EventArgs)
-        Try
-            If File.Exists(directorylist(sender.ToString)) Then
-                directory = directorylist(sender.ToString)
+        If directorylist(sender.ToString) <> directory Then
+            Try
+                If File.Exists(directorylist(sender.ToString)) Then
+                    directory = directorylist(sender.ToString)
 
-                displayName.Enabled = True
-                BackToStartBtn.Enabled = True
-                StopBtn.Enabled = True
-                PlayBtn.Enabled = True
-                SkipBtn.Enabled = True
-                RestartBtn.Enabled = True
-                Label1.Enabled = True
-                TrackNoBox.Enabled = True
-                Volume.Enabled = True
-                displayName.Text = pathFromIndex(True)
-                Player.URL = pathFromIndex(False)
-                Player.controls.stop()
-            Else
-                displayName.Enabled = False
-                BackToStartBtn.Enabled = False
-                StopBtn.Enabled = False
-                PlayBtn.Enabled = False
-                SkipBtn.Enabled = False
-                RestartBtn.Enabled = False
-                Label1.Enabled = False
-                TrackNoBox.Enabled = False
-                Volume.Enabled = False
-            End If
-        Catch ex As Exception
-        End Try
-        SongID = 0
-        PlayBtn_Click(sender, New EventArgs)
+                    displayName.Enabled = True
+                    BackToStartBtn.Enabled = True
+                    StopBtn.Enabled = True
+                    PlayBtn.Enabled = True
+                    SkipBtn.Enabled = True
+                    RestartBtn.Enabled = True
+                    Label1.Enabled = True
+                    TrackNoBox.Enabled = True
+                    Volume.Enabled = True
+                    displayName.Text = pathFromIndex(True)
+                    Player.URL = pathFromIndex(False)
+                    Player.controls.stop()
+                Else
+                    displayName.Enabled = False
+                    BackToStartBtn.Enabled = False
+                    StopBtn.Enabled = False
+                    PlayBtn.Enabled = False
+                    SkipBtn.Enabled = False
+                    RestartBtn.Enabled = False
+                    Label1.Enabled = False
+                    TrackNoBox.Enabled = False
+                    Volume.Enabled = False
+                End If
+            Catch ex As Exception
+            End Try
+            SongID = 0
+            PlayBtn_Click(sender, New EventArgs)
+        End If
     End Sub
     Private Sub Volume_Scroll(sender As Object, e As EventArgs) Handles Volume.Scroll
         Player.settings.volume = Volume.Value
