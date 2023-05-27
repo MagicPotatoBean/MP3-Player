@@ -2,7 +2,7 @@
 Imports System.Reflection.Emit
 Imports WMPLib
 Imports Shell32
-
+Imports System.Net.Security
 Public Class Form1
     Dim Player As WindowsMediaPlayer = New WindowsMediaPlayer
     Dim SongID As Integer = 1
@@ -12,6 +12,7 @@ Public Class Form1
     Dim PlaylistLen As Integer = 0
     Dim progressSong As Byte = 1
     Dim renamingFile As Boolean = False
+    Dim directorylist As New Dictionary(Of String, String)
     Private Sub BackToStartBtn_Click(sender As Object, e As EventArgs) Handles BackToStartBtn.Click
         If SongID > 1 Then
             SongID -= 1
@@ -123,21 +124,69 @@ BeforeDecrement:
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
 
         Dim mainPath As String = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) & "\MP3Radio\"
-        If File.Exists(mainPath & "Directory.txt") Then
-            mainDirectory = mainPath & "Directory.txt"
+        If File.Exists(mainPath & "Directory.dir") Then
+            mainDirectory = mainPath & "Directory.dir"
         Else
             IO.Directory.CreateDirectory(mainPath)
-            File.Create(mainPath & "Directory.txt")
-            mainDirectory = mainPath & "Directory.txt"
+            File.Create(mainPath & "Directory.dir")
+            mainDirectory = mainPath & "Directory.dir"
         End If
         Dim directories() As String = File.ReadAllLines(mainDirectory)
         For Each value In directories
             dirList(dirList.GetUpperBound(0)) = value
             ReDim Preserve dirList(dirList.GetUpperBound(0) + 1)
-            DomainUpDown1.Items.Add(IO.Path.GetFileName(value))
+            If IO.Path.GetExtension(value) = ".txt" Then
+                'DomainUpDown1.Items.Add(IO.Path.GetFileNameWithoutExtension(value))
+            End If
+            populateToolStripMenu(SelectDirectoryToolStripMenuItem, value)
         Next
+    End Sub
+    Private Sub populateToolStripMenu(parentToolStripMenu As ToolStripMenuItem, path As String)
+        Dim newToolStripMenuItem As New ToolStripMenuItem(IO.Path.GetFileNameWithoutExtension(path))
+        If IO.Path.GetExtension(path) = ".dir" Then
+            Dim directories() As String = File.ReadAllLines(path)
+            For Each value In directories
+                populateToolStripMenu(newToolStripMenuItem, value)
+            Next
+        Else
+            directorylist.Add(IO.Path.GetFileNameWithoutExtension(path), path)
+            newToolStripMenuItem.Checked = False
+            AddHandler newToolStripMenuItem.Click, AddressOf toolStripClickHandler
+        End If
+        parentToolStripMenu.DropDownItems.Add(newToolStripMenuItem)
+    End Sub
+    Private Sub toolStripClickHandler(sender As Object, e As EventArgs)
+        Try
+            If File.Exists(directorylist(sender.ToString)) Then
+                directory = directorylist(sender.ToString)
 
-
+                displayName.Enabled = True
+                BackToStartBtn.Enabled = True
+                StopBtn.Enabled = True
+                PlayBtn.Enabled = True
+                SkipBtn.Enabled = True
+                RestartBtn.Enabled = True
+                Label1.Enabled = True
+                TrackNoBox.Enabled = True
+                Volume.Enabled = True
+                displayName.Text = pathFromIndex(True)
+                Player.URL = pathFromIndex(False)
+                Player.controls.stop()
+            Else
+                displayName.Enabled = False
+                BackToStartBtn.Enabled = False
+                StopBtn.Enabled = False
+                PlayBtn.Enabled = False
+                SkipBtn.Enabled = False
+                RestartBtn.Enabled = False
+                Label1.Enabled = False
+                TrackNoBox.Enabled = False
+                Volume.Enabled = False
+            End If
+        Catch ex As Exception
+        End Try
+        SongID = 0
+        PlayBtn_Click(sender, New EventArgs)
     End Sub
     Private Sub Volume_Scroll(sender As Object, e As EventArgs) Handles Volume.Scroll
         Player.settings.volume = Volume.Value
@@ -185,37 +234,37 @@ BeforeDecrement:
         End If
     End Function
 
-    Private Sub DomainUpDown1_SelectedItemChanged(sender As Object, e As EventArgs) Handles DomainUpDown1.SelectedItemChanged
-        Try
-            If File.Exists(dirList(DomainUpDown1.SelectedIndex)) Then
-                directory = dirList(DomainUpDown1.SelectedIndex)
+    'Private Sub DomainUpDown1_SelectedItemChanged(sender As Object, e As EventArgs)
+    '    Try
+    '        If File.Exists(dirList(DomainUpDown1.SelectedIndex)) Then
+    '            directory = dirList(DomainUpDown1.SelectedIndex)
 
-                displayName.Enabled = True
-                BackToStartBtn.Enabled = True
-                StopBtn.Enabled = True
-                PlayBtn.Enabled = True
-                SkipBtn.Enabled = True
-                RestartBtn.Enabled = True
-                Label1.Enabled = True
-                TrackNoBox.Enabled = True
-                Volume.Enabled = True
-                displayName.Text = pathFromIndex(True)
-                Player.URL = pathFromIndex(False)
-                Player.controls.stop()
-            Else
-                displayName.Enabled = False
-                BackToStartBtn.Enabled = False
-                StopBtn.Enabled = False
-                PlayBtn.Enabled = False
-                SkipBtn.Enabled = False
-                RestartBtn.Enabled = False
-                Label1.Enabled = False
-                TrackNoBox.Enabled = False
-                Volume.Enabled = False
-            End If
-        Catch ex As Exception
-        End Try
-    End Sub
+    '            displayName.Enabled = True
+    '            BackToStartBtn.Enabled = True
+    '            StopBtn.Enabled = True
+    '            PlayBtn.Enabled = True
+    '            SkipBtn.Enabled = True
+    '            RestartBtn.Enabled = True
+    '            Label1.Enabled = True
+    '            TrackNoBox.Enabled = True
+    '            Volume.Enabled = True
+    '            displayName.Text = pathFromIndex(True)
+    '            Player.URL = pathFromIndex(False)
+    '            Player.controls.stop()
+    '        Else
+    '            displayName.Enabled = False
+    '            BackToStartBtn.Enabled = False
+    '            StopBtn.Enabled = False
+    '            PlayBtn.Enabled = False
+    '            SkipBtn.Enabled = False
+    '            RestartBtn.Enabled = False
+    '            Label1.Enabled = False
+    '            TrackNoBox.Enabled = False
+    '            Volume.Enabled = False
+    '        End If
+    '    Catch ex As Exception
+    '    End Try
+    'End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
         Process.Start("notepad", """""" & mainDirectory & """""")
