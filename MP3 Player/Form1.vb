@@ -12,6 +12,16 @@ Public Class Form1
     Dim PlaylistLen As Integer = 0
     Dim progressSong As Byte = 1
     Dim renamingFile As Boolean = False
+    Private Sub UpdateProgressBounds()
+        TrackBar1.Minimum = 0
+        TrackBar1.Maximum = Player.currentMedia.duration
+    End Sub
+    Private Sub UpdateProgress()
+        Try
+            TrackBar1.Value = Player.controls.currentPosition
+        Catch ex As Exception
+        End Try
+    End Sub
     Private Sub BackToStartBtn_Click(sender As Object, e As EventArgs) Handles BackToStartBtn.Click
         If SongID > 1 Then
             SongID -= 1
@@ -172,6 +182,7 @@ BeforeDecrement:
                     Label1.Enabled = True
                     TrackNoBox.Enabled = True
                     Volume.Enabled = True
+                    TrackBar1.Enabled = True
                     displayName.Text = pathFromIndex(True)
                     Player.URL = pathFromIndex(False)
                     Player.controls.stop()
@@ -189,7 +200,10 @@ BeforeDecrement:
             Catch ex As Exception
             End Try
             SongID = 0
-            PlayBtn_Click(sender, New EventArgs)
+            If Not Player.playState = 3 Then
+                Player.controls.play()
+                Timer1.Start()
+            End If
         End If
     End Sub
     Private Sub Volume_Scroll(sender As Object, e As EventArgs) Handles Volume.Scroll
@@ -197,7 +211,8 @@ BeforeDecrement:
     End Sub
 
     Private Sub Timer1_Tick(sender As Object, e As EventArgs) Handles Timer1.Tick
-
+        UpdateProgressBounds()
+        UpdateProgress()
         If Player.playState = 10 Or Player.playState = 1 And Not renamingFile Then
             Select Case SongID
                 Case Is < 1
@@ -280,5 +295,9 @@ BeforeDecrement:
         Else
             progressSong = 1
         End If
+    End Sub
+
+    Private Sub TrackBar1_Scroll(sender As Object, e As EventArgs) Handles TrackBar1.Scroll
+        Player.controls.currentPosition = TrackBar1.Value
     End Sub
 End Class

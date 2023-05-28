@@ -38,8 +38,12 @@ Partial Class Form1
         Me.FolderBrowserDialog1 = New System.Windows.Forms.FolderBrowserDialog()
         Me.MenuStrip1 = New System.Windows.Forms.MenuStrip()
         Me.SelectDirectoryToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.TrackBar1 = New System.Windows.Forms.TrackBar()
+        Me.Label2 = New System.Windows.Forms.Label()
+        Me.Label3 = New System.Windows.Forms.Label()
         CType(Me.Volume, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.MenuStrip1.SuspendLayout()
+        CType(Me.TrackBar1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'CheckBox1
@@ -67,14 +71,14 @@ Partial Class Form1
         Me.Volume.Enabled = False
         Me.Volume.ImeMode = System.Windows.Forms.ImeMode.NoControl
         Me.Volume.LargeChange = 10
-        Me.Volume.Location = New System.Drawing.Point(3, 47)
+        Me.Volume.Location = New System.Drawing.Point(47, 47)
         Me.Volume.Maximum = 100
         Me.Volume.Name = "Volume"
-        Me.Volume.Size = New System.Drawing.Size(225, 45)
+        Me.Volume.Size = New System.Drawing.Size(181, 45)
         Me.Volume.SmallChange = 5
         Me.Volume.TabIndex = 21
         Me.Volume.TickFrequency = 10
-        Me.Volume.Value = 50
+        Me.Volume.Value = 10
         '
         'RestartBtn
         '
@@ -188,11 +192,45 @@ Partial Class Form1
         Me.SelectDirectoryToolStripMenuItem.Size = New System.Drawing.Size(100, 20)
         Me.SelectDirectoryToolStripMenuItem.Text = "Select directory"
         '
+        'TrackBar1
+        '
+        Me.TrackBar1.Enabled = False
+        Me.TrackBar1.ImeMode = System.Windows.Forms.ImeMode.NoControl
+        Me.TrackBar1.LargeChange = 10
+        Me.TrackBar1.Location = New System.Drawing.Point(47, 100)
+        Me.TrackBar1.Maximum = 100
+        Me.TrackBar1.Name = "TrackBar1"
+        Me.TrackBar1.Size = New System.Drawing.Size(182, 45)
+        Me.TrackBar1.SmallChange = 5
+        Me.TrackBar1.TabIndex = 25
+        Me.TrackBar1.TickFrequency = 60
+        '
+        'Label2
+        '
+        Me.Label2.AutoSize = True
+        Me.Label2.Location = New System.Drawing.Point(10, 58)
+        Me.Label2.Name = "Label2"
+        Me.Label2.Size = New System.Drawing.Size(42, 13)
+        Me.Label2.TabIndex = 26
+        Me.Label2.Text = "Volume"
+        '
+        'Label3
+        '
+        Me.Label3.AutoSize = True
+        Me.Label3.Location = New System.Drawing.Point(4, 110)
+        Me.Label3.Name = "Label3"
+        Me.Label3.Size = New System.Drawing.Size(48, 13)
+        Me.Label3.TabIndex = 27
+        Me.Label3.Text = "Progress"
+        '
         'Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(232, 103)
+        Me.ClientSize = New System.Drawing.Size(232, 133)
+        Me.Controls.Add(Me.Label3)
+        Me.Controls.Add(Me.Label2)
+        Me.Controls.Add(Me.TrackBar1)
         Me.Controls.Add(Me.CheckBox1)
         Me.Controls.Add(Me.Button1)
         Me.Controls.Add(Me.MenuStrip1)
@@ -206,14 +244,15 @@ Partial Class Form1
         Me.Controls.Add(Me.BackToStartBtn)
         Me.Controls.Add(Me.displayName)
         Me.MainMenuStrip = Me.MenuStrip1
-        Me.MaximumSize = New System.Drawing.Size(248, 142)
-        Me.MinimumSize = New System.Drawing.Size(248, 142)
+        Me.MaximumSize = New System.Drawing.Size(248, 172)
+        Me.MinimumSize = New System.Drawing.Size(248, 172)
         Me.Name = "Form1"
         Me.ShowIcon = False
         Me.Text = "MP3 Player"
         CType(Me.Volume, System.ComponentModel.ISupportInitialize).EndInit()
         Me.MenuStrip1.ResumeLayout(False)
         Me.MenuStrip1.PerformLayout()
+        CType(Me.TrackBar1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -234,4 +273,7 @@ Partial Class Form1
     Friend WithEvents FolderBrowserDialog1 As FolderBrowserDialog
     Friend WithEvents MenuStrip1 As MenuStrip
     Friend WithEvents SelectDirectoryToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents TrackBar1 As TrackBar
+    Friend WithEvents Label2 As Label
+    Friend WithEvents Label3 As Label
 End Class
