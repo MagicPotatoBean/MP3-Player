@@ -3,6 +3,9 @@ Imports System.Reflection.Emit
 Imports WMPLib
 Imports Shell32
 Imports System.Net.Security
+Imports System.Runtime.InteropServices
+Imports System.Runtime.CompilerServices
+
 Public Class Form1
     Dim Player As WindowsMediaPlayer = New WindowsMediaPlayer
     Dim SongID As Integer = 1
@@ -12,6 +15,7 @@ Public Class Form1
     Dim PlaylistLen As Integer = 0
     Dim progressSong As Byte = 1
     Dim renamingFile As Boolean = False
+    'Dim kbhook As New KeyboardHook
     Private Sub UpdateProgressBounds()
         TrackBar1.Minimum = 0
         TrackBar1.Maximum = Player.currentMedia.duration
@@ -34,6 +38,8 @@ Public Class Form1
         Player.URL = pathFromIndex(False)
         Player.controls.play()
         Timer1.Start()
+        StopBtn.Enabled = True
+        PlayBtn.Enabled = False
     End Sub
 
     Private Sub StopBtn_Click(sender As Object, e As EventArgs) Handles StopBtn.Click
@@ -41,6 +47,8 @@ Public Class Form1
             Player.controls.pause()
             Timer1.Stop()
         End If
+        StopBtn.Enabled = False
+        PlayBtn.Enabled = True
     End Sub
 
     Private Sub PlayBtn_Click(sender As Object, e As EventArgs) Handles PlayBtn.Click
@@ -48,6 +56,8 @@ Public Class Form1
             Player.controls.play()
             Timer1.Start()
         End If
+        StopBtn.Enabled = True
+        PlayBtn.Enabled = False
     End Sub
 
     Private Sub SkipBtn_Click(sender As Object, e As EventArgs) Handles SkipBtn.Click
@@ -58,6 +68,8 @@ Public Class Form1
         Player.URL = pathFromIndex(False)
         Player.controls.play()
         Timer1.Start()
+        StopBtn.Enabled = True
+        PlayBtn.Enabled = False
     End Sub
 
     Private Sub Restart_Click(sender As Object, e As EventArgs) Handles RestartBtn.Click
@@ -66,6 +78,8 @@ Public Class Form1
         Player.URL = pathFromIndex(False)
         Player.controls.play()
         Timer1.Start()
+        StopBtn.Enabled = True
+        PlayBtn.Enabled = False
     End Sub
 
 
@@ -101,11 +115,11 @@ BeforeDecrement:
                 MsgBox("Filepath missing for : """ & song(0) & """ in """ & directory & """")
             Else
 
-                If File.Exists(Strings.Left(directory, Strings.InStrRev(directory, "\")) & "\" & song(1)) Then
-                    Return Strings.Left(directory, Strings.InStrRev(directory, "\")) & "\" & song(1)
+                If File.Exists(Strings.Left(directory, Strings.InStrRev(directory, "\")) & song(1)) Then
+                    Return Strings.Left(directory, Strings.InStrRev(directory, "\")) & song(1)
                 Else
-                    MsgBox("File " & Strings.Left(directory, Strings.InStrRev(directory, "\")) & "\" & song(1) & " does not exist, so has been removed from the directory.")
-                    File.WriteAllLines((Strings.Left(directory, Strings.InStrRev(directory, "\")) & "\" & "Directory.txt"), removeItem(songs, SongID + 4))
+                    MsgBox("File " & Strings.Left(directory, Strings.InStrRev(directory, "\")) & song(1) & " does not exist, so has been removed from the directory.")
+                    File.WriteAllLines((Strings.Left(directory, Strings.InStrRev(directory, "\")) & "Directory.txt"), removeItem(songs, SongID + 4))
                     GoTo BeforeDecrement
                 End If
             End If
@@ -133,7 +147,6 @@ BeforeDecrement:
     End Function
 
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-
         Dim mainPath As String = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) & "\MP3Radio\"
         If File.Exists(mainPath & "Directory.dir") Then
             mainDirectory = mainPath & "Directory.dir"
@@ -151,6 +164,7 @@ BeforeDecrement:
             End If
             populateToolStripMenu(SelectDirectoryToolStripMenuItem, value)
         Next
+        Player.settings.volume = Volume.Value
     End Sub
     Private Sub populateToolStripMenu(parentToolStripMenu As ToolStripMenuItem, path As String)
         Dim newToolStripMenuItem As New ToolStripMenuItem(IO.Path.GetFileNameWithoutExtension(path))
@@ -172,20 +186,24 @@ BeforeDecrement:
             Try
                 If File.Exists(toolstrip.Tag) Then
                     directory = toolstrip.Tag
-
+                    SelectDirectoryToolStripMenuItem.Text = toolstrip.Text
                     displayName.Enabled = True
                     BackToStartBtn.Enabled = True
                     StopBtn.Enabled = True
-                    PlayBtn.Enabled = True
                     SkipBtn.Enabled = True
                     RestartBtn.Enabled = True
                     Label1.Enabled = True
                     TrackNoBox.Enabled = True
                     Volume.Enabled = True
                     TrackBar1.Enabled = True
+                    Timer1.Stop()
+                    TrackNoBox.Text = 1
+                    SongID = 1
                     displayName.Text = pathFromIndex(True)
                     Player.URL = pathFromIndex(False)
                     Player.controls.stop()
+                    Player.controls.play()
+                    Timer1.Start()
                 Else
                     displayName.Enabled = False
                     BackToStartBtn.Enabled = False
@@ -199,11 +217,6 @@ BeforeDecrement:
                 End If
             Catch ex As Exception
             End Try
-            SongID = 0
-            If Not Player.playState = 3 Then
-                Player.controls.play()
-                Timer1.Start()
-            End If
         End If
     End Sub
     Private Sub Volume_Scroll(sender As Object, e As EventArgs) Handles Volume.Scroll

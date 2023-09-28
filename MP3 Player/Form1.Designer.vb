@@ -201,9 +201,8 @@ Partial Class Form1
         Me.TrackBar1.Maximum = 100
         Me.TrackBar1.Name = "TrackBar1"
         Me.TrackBar1.Size = New System.Drawing.Size(182, 45)
-        Me.TrackBar1.SmallChange = 5
         Me.TrackBar1.TabIndex = 25
-        Me.TrackBar1.TickFrequency = 60
+        Me.TrackBar1.TickFrequency = 10
         '
         'Label2
         '
